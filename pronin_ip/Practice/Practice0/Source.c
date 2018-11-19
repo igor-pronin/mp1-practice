@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <locale.h>
+
 void main()
 {
 	float x, y, r, x1, y1, r1, L;
