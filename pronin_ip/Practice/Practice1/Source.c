@@ -3,8 +3,8 @@
 #include <locale.h>
 void main()
 {
-	float h, w, d, t, t1, t2, p1, p2, p3, v1, v2, v3, v4, v5, m1, m2, m3, m4, m5;
-	int n, m6;
+	float h, w, d, t, t1, t2, p1, p2, p3, v1, v2, v3, v4, v5, m1, m2, m3, m4, m5, n;
+	int  m6;
 	setlocale(LC_ALL, "Russian");
 	printf("¬ведите высоту задней стенки в метрах");
 	scanf("%f", &h);
