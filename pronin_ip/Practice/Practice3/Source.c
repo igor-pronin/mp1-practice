@@ -4,13 +4,13 @@
 #include <locale.h>
 void main()
 {
+	setlocale(LC_ALL, "Russian");
 	int a, b, c, x, y, z, w;
 	char q;
 	c = 0;
 	z = 0;
 	x = 0;
 	y = 1000;
-	setlocale(LC_ALL, "Russian");
 	srand((unsigned int)time(0));
 
 	printf("нажмите 1, если хотите отгадать чило; нажмите 2, если хотите загадать число");
