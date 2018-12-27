@@ -4,7 +4,8 @@
 #include <locale.h>
 void main()
 {
-	int a, b, c, x, y, z, q, w;
+	int a, b, c, x, y, z, w;
+	char q;
 	c = 0;
 	z = 0;
 	x = 0;
@@ -34,13 +35,13 @@ void main()
 		do {
 			do { b = rand(); } while ((b < x) || (b > y));
 			printf("%d", b);
-			printf("введите 1, если ваше число меньше; введите 2, если ваше число больше");
-			scanf("%d", &q);
-			if (q == 1) 
+			printf("введите <, если ваше число меньше; введите >, если ваше число больше");
+			scanf("%*c%c", &q);
+			if (q == '<' ) 
 			y = b; 
 			else 
 			{
-			if (q == 2) 
+			if (q == '>') 
 			x = b; 
 			else  
 			return;

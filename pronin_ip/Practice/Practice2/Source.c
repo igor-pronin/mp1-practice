@@ -8,9 +8,10 @@ void main()
 {
 	setlocale(LC_ALL, "Russian");
 	srand((unsigned int)time(0));
-	int a, b, c, cop, d, n, x=0, y=9, z=1, i, j, bull, cow;
+	int a, b, c, cop, d, n, x=0, y=9, z=1, i, j, bull, cow, e;
 	int f[B];
 	int g[B];
+	int q[B];
 	cow = 0;
 	bull = 0;
 	c = 0;
@@ -59,9 +60,25 @@ void main()
 	do
 	{
 	printf("отгадай число");
+	scanf("%d", &e);
 	for (i = 0; i < n; i++)
-		scanf("%d", &(g[i]));
-		//printf("g=""%d", g[i]);
+	{
+		q[i] = e % 10;
+		e = e / 10;
+	} //записываем цифры числа e в массив q
+	for (i = 0; i < n; i++)
+		g[i] = q[n - 1 - i]; //записываем цифры из массива q в массив g в обратнои порядке
+	for (i = 0; i < n; i++)
+	{
+		for (j = i + 1; j < n; j++)
+		{
+			if (g[i] == g[j])
+			{
+				printf("Цифры не должны повторяться!");
+				return;
+			}
+		}
+	}
 	//начинается сравнение
 	for (i = 0; i < n; i++)
 	{
