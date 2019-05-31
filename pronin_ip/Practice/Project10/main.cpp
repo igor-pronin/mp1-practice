@@ -7,12 +7,25 @@ void main()
 	cout << "Container 1:" << endl;
 	Container <int, 6> container_1(5, a);
 	cout << container_1 << endl;
-	container_1.Add(2);
+	try
+	{
+		container_1.Add(2); //exeption
+	}
+	catch (const char* problem)
+	{
+		cout << problem << endl;
+	}
 	container_1.Add(6);
-	cout << container_1.IsFull() << endl;
-	cout << container_1.IsEmpty() << endl;
 	container_1.Add(7);
 	container_1.Delete(1);
+	try
+	{
+		container_1.Deletebyidx(-1); //exeption
+	}
+	catch (const char* problem)
+	{
+		cout << problem << endl;
+	}
 	cout << container_1 << endl;
 
 	cout << endl;
@@ -20,10 +33,15 @@ void main()
 	cout << "Container 2:" << endl;
 	Container <float, 7> container_2(5, b);
 	cout << container_2 << endl;
-	container_2.Add(2.22f);
+	try
+	{
+		container_2.Add(2.22f); // exeption
+	}
+	catch (const char* problem)
+	{
+		cout << problem << endl;
+	}
 	container_2.Add(6.666f);
-	cout << container_2.IsFull() << endl;
-	cout << container_2.IsEmpty() << endl;
 	container_2.Add(-7.07f);
 	container_2.Delete(1.1f);
 	cout << container_2 << endl;
@@ -48,10 +66,15 @@ void main()
 	int *p1 = &elem1;
 	int *p2 = &elem2;
 	int *p3 = &elem3;
-	container_3.Add(p);
+	try
+	{
+		container_3.Add(p);
+	}
+	catch (const char* problem)
+	{
+		cout << problem << endl; //exeption
+	}
 	container_3.Add(p1);
-	cout << container_3.IsFull() << endl;
-	cout << container_3.IsEmpty() << endl;
 	container_3.Add(p2);
 	container_3.Delete(p3);
 	cout << container_3 << endl;
@@ -61,18 +84,23 @@ void main()
 	cout << "Container 4:" << endl;
 	Container <float*, 7> container_4(5, b1);
 	cout << container_4 << endl;
-	float elem_ = 2;
-	float elem1_ = 6;
-	float elem2_ = 7;
-	float elem3_ = 1;
+	float elem_ = 2.22;
+	float elem1_ = 6.666;
+	float elem2_ = -7.07;
+	float elem3_ = 1.1;
 	float *p_ = &elem_;
 	float *p1_ = &elem1_;
 	float *p2_ = &elem2_;
 	float *p3_ = &elem3_;
-	container_4.Add(p_);
+	try
+	{
+		container_4.Add(p_);
+	}
+	catch (const char* problem)
+	{
+		cout << problem << endl; //exeption
+	}
 	container_4.Add(p1_);
-	cout << container_4.IsFull() << endl;
-	cout << container_4.IsEmpty() << endl;
 	container_4.Add(p2_);
 	container_4.Delete(p3_);
 	cout << container_4 << endl;

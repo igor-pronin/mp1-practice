@@ -28,6 +28,13 @@ public:
 			o << container.arr[i] << " ";
 		return o;
 	}
+	friend istream&  operator>>(istream& in, Container& container)
+	{
+
+		for (int i = 0; i < container.count; i++)
+			in >> container.arr[i];
+		return in;
+	}
 };
 
 
@@ -85,7 +92,7 @@ void Container <T, maxsize>::Add(T a)
 {
 	if (Find(a) == -1)
 	{
-		if (count == maxsize)
+		if (IsFull())
 		{
 			AddSize(0);
 			cout << "maxsize was increased" << endl;
@@ -95,19 +102,32 @@ void Container <T, maxsize>::Add(T a)
 		cout << "element" << " " << a << " " << "was added successfully" << endl;
 	}
 	else
-		cout << "element" << " " << a << " " << "already exists" << endl;
+		//cout << "element" << " " << a << " " << "already exists" << endl;
+		throw "element already exists";
 }
 template <typename T, int maxsize>
 void Container <T, maxsize>::Deletebyidx(int idx)
 {
-	arr[idx] = arr[count - 1];
-	count--;
+	if (IsEmpty() || idx < 0 || idx > count)
+		//cout << "element cant be deleted" << endl;
+		throw "element cant be deleted";
+	else
+	{
+		cout << "element" << " " << arr[idx] << " " << "was deleted successfully" << endl;
+		arr[idx] = arr[count - 1];
+		count--;
+		
+	}
 }
 template <typename T, int maxsize>
 void Container <T, maxsize>::Delete(T a)
 {
-	Deletebyidx(Find(a));
-	cout << "element" << " " << a << " " << "was deleted successfully" << endl;
+	if (Find(a) == -1)
+		throw "element is not found";
+	else
+	{
+		Deletebyidx(Find(a));
+	}
 }
 template <typename T, int maxsize>
 void Container <T, maxsize>::AddSize(int a)
@@ -115,11 +135,11 @@ void Container <T, maxsize>::AddSize(int a)
 	if (a == 0) a = sizestap;
 	int max = maxsize;
 	max += a;
-	T *tmp = new T[max];
+	T* tmp = new T[max];
 	for (int i = 0; i < count; i++)
 		tmp[i] = arr[i];
 	delete[] arr;
-	arr = tmp;
+	arr = tmp; 
 }
 template <typename T, int maxsize>
 T& Container <T, maxsize>::operator[](int a)
