@@ -37,6 +37,12 @@ void main()
 	{
 		cout << str << endl;
 	}
+	try {
+		cout << "A=A" << (A = A) << endl; //exeption
+	}
+	catch (const char* str)
+	{
+		cout << str << endl;
+	}
 	system("pause");
-
 }

@@ -1,53 +1,55 @@
 #include "Header.h"
-Matrix::Matrix()
-{
-	rows = 3;
-	cols = 3;
-	m = new double[rows*cols];
-	for (int i = 0; i < rows*cols; i++)
-		m[i] = 0;
-}
+#include <cstring>
 Matrix::Matrix(int _rows, int _cols)
 {
 	rows = _rows;
 	cols = _cols;
 	m = new double[rows*cols];
-	for (int i = 0; i < rows*cols; i++)
-		m[i] = 0;
+	memset(m, 0, rows * cols * sizeof(double));
 }
 Matrix::Matrix(int _rows, int _cols, double* a)
 {
 	rows = _rows;
 	cols = _cols;
 	m = new double[rows*cols];
-	for (int i = 0; i < rows*cols; i++)
-		m[i] = a[i];
+	memcpy(m, a, rows * cols * sizeof(double));
 }
 Matrix::Matrix(const Matrix& a)
 {
 	rows = a.rows;
 	cols = a.cols;
 	m = new double[rows*cols];
-	for (int i = 0; i < rows*cols; i++)
-		m[i] = a.m[i];
+	memcpy(m, a.m, rows * cols * sizeof(double));
 }
 Matrix::~Matrix()
 {
 	delete(m);
 }
-Matrix& Matrix::operator=(const Matrix& a)
+const Matrix& Matrix::operator=(const Matrix& a)
 {
 	if ((rows != a.rows) || (cols != a.cols))
 		throw "different size of matrix";
+	if ( *this == a)
+		throw "error";
 	rows = a.rows;
 	cols = a.cols;
 	for (int i = 0; i < rows*cols; i++)
 		m[i] = a.m[i];
 	return *this;
 }
+bool Matrix::operator==(const Matrix& a)
+{
+	int flag = 0;
+	for (int i = 0; i < rows * cols; i++)
+		if (m[i] != a.m[i])
+			flag = 1;
+	if ((flag == 0) && (rows == a.rows) && (cols == a.cols))
+		return 1;
+	else return 0;
+}
 Matrix Matrix::operator+(double a)
 {
-	Matrix result;
+	Matrix result(rows, cols);
 	for (int i = 0; i < rows*cols; i++)
 		result.m[i] = m[i] + a;
 	return result;
@@ -63,7 +65,7 @@ Matrix Matrix::operator+(const Matrix& a)
 }
 Matrix Matrix::operator-(double a)
 {
-	Matrix result;
+	Matrix result(rows, cols);
 	for (int i = 0; i < rows*cols; i++)
 		result.m[i] = m[i] - a;
 	return result;
@@ -79,7 +81,7 @@ Matrix Matrix::operator-(const Matrix& a)
 }
 Matrix Matrix::operator*(double a)
 {
-	Matrix result;
+	Matrix result(rows,cols);
 	for (int i = 0; i < rows*cols; i++)
 		result.m[i] = m[i] * a;
 	return result;
@@ -108,6 +110,12 @@ ostream& operator<<(ostream& o, const Matrix& a)
 		o << " " << a.m[i];
 	}
 	return o;
+}
+istream& operator>>(istream& in, const Matrix& a)
+{
+	for (int i = 0; i < a.rows*a.cols; i++)
+		in >> a.m[i];
+	return in;
 }
 double* Matrix::operator[](int index)
 {
