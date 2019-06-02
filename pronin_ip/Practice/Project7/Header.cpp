@@ -3,47 +3,45 @@
 using namespace std;
 Vector::Vector(int _n)
 {
-	int i;
 	n = _n;
 	elements = new int[_n];
-	for (i = 0; i < _n; i++)
-		elements[i] = 0;
+	memset(elements, 0, n * sizeof(int));
 }
 Vector::Vector(int _n, int* _elements)
 {
-	int i;
 	n = _n;
 	elements = new int[_n];
-	for (i = 0; i < _n; i++)
-	{
-		elements[i] = _elements[i];
-	}
+	memcpy(elements, _elements, n * sizeof(int));
 }
 Vector::Vector(const Vector &a)
 {
-	int i;
 	n = a.n;
 	elements = new int[a.n];
-	for (i = 0; i < a.n; i++)
-	{
-		elements[i] = a.elements[i];
-	}
+	memcpy(elements, a.elements, n * sizeof(int));
 }
 Vector::~Vector()
 {
 	n = 0;
-	delete(elements);
+	delete [] elements;
 }
-double Vector::Length(Vector a)
+double Vector::Length(const Vector& a) 
 {
-	double length, len = 0;
-	for (int i = 0; i < a.n; i++)
+	double len = 0;
+	for (int i = 0; i < n; i++)
 		len += a.elements[i] * a.elements[i];
-	length = sqrt(len);
-	return length;
+	return sqrt(len);
 }
-Vector& Vector::operator=(const Vector& a)
+int Vector::Scayler(const Vector& a, const Vector& b) 
 {
+	int x = 0;
+	for (int i = 0; i < a.n; i++)
+		x += a.elements[i] * b.elements[i];
+	return x;
+}
+const Vector& Vector::operator=(const Vector& a)
+{
+	if (*this == a)
+		throw "wrong operation";
 	n = a.n;
 	elements = new int[n];
 	for (int i = 0; i < n; i++)
@@ -52,6 +50,8 @@ Vector& Vector::operator=(const Vector& a)
 }
 Vector Vector::operator+(const Vector & a)
 {
+	if (n != a.n)
+		throw "different size of vectors";
 	Vector b(a.n);
 	for (int i = 0; i < a.n; i++)
 		b.elements[i] = elements[i] + a.elements[i];
@@ -59,6 +59,8 @@ Vector Vector::operator+(const Vector & a)
 };
 Vector Vector::operator-(const Vector &a)
 {
+	if (n != a.n)
+		throw "different size of vectors";
 	Vector b(a.n);
 	for (int i = 0; i < a.n; i++)
 		b.elements[i] = elements[i] - a.elements[i];
@@ -91,7 +93,7 @@ bool Vector::operator==(const Vector& a)
 		if ((elements[i] == a.elements[i]) && (n == a.n))
 			return true;
 		else
-			return false;
+			return false; 
 }
 bool Vector::operator!=(const Vector& a)
 {
@@ -109,12 +111,12 @@ bool Vector::operator<(const Vector& a)
 {
 	return(Length(*this) < Length(a));
 }
-void* Vector::operatornew(size_t n)
+void* Vector::operator new(size_t n)
 {
 	void* tmp = malloc(n);
-	return tmp;
+	return tmp; 
 }
-void Vector::operatordelete(void* n)
+void Vector::operator delete[](void* n)
 {
 	free(n);
 }
@@ -122,9 +124,19 @@ int& Vector::operator[](int size)
 {
 		return elements[size];
 }
+const int& Vector::operator[](int size) const
+{
+	return elements[size];
+}
 ostream& operator<< (ostream& o, const Vector& a)
 {
 	for (int i = 0; i < a.n; i++)
 		o << a.elements[i];
 	return o;
+}
+istream& operator>> (istream& in, const Vector& a)
+{
+	for (int i = 0; i < a.n; i++)
+		in >> a.elements[i];
+	return in;
 }
