@@ -8,9 +8,10 @@
 
 void main()
 {
-	int a, b, c, cop, d, n, x = 0, y = 9, z = 1, i, j, bull, cow;
+	int q, a, b, c, cop, d, n, x = 0, y = 9, z = 1, i, j, bull, cow, number;
 	int f[B];
 	int g[B];
+	int l[B];
 	setlocale(LC_ALL, "Russian");
 	srand((unsigned int)time(0));
 	cow = 0;
@@ -20,7 +21,6 @@ void main()
 	printf("введите длину загадываемого числа");
 	scanf("%d", &n);
 	a = rand() * (y - z) / RAND_MAX + z;
-	//printf("a=""%d", a);
 	do
 	{
 		b=rand() * (y - x) / RAND_MAX + x;
@@ -61,9 +61,20 @@ void main()
 	do
 	{
 		printf("отгадай число");
+		scanf("%d", &number);
+		q = number / pow(10, n - 1);
+		if (q == 0 || q > 9)
+		{
+			printf("введеное число не соответствует введеной длине");
+			return;
+		}
 		for (i = 0; i < n; i++)
-			scanf("%d", &(g[i]));
-			//printf("g=""%d", g[i]);
+		{
+			l[i] = number % 10;
+			number = number / 10;
+		}
+		for (i = 0; i < n; i++)
+			g[i] = l[n - i -1];
 		//начинается сравнение
 		for (i = 0; i < n; i++)
 		{
