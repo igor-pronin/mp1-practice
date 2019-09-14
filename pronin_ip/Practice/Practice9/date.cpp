@@ -23,7 +23,7 @@ Date::~Date()
 	month = 0;
 	year = 0;
 }
-bool Date::operator==(const Date& _date)
+bool Date::operator==(const Date& _date) const
 {
 	if (day == _date.day && month == _date.month && year == _date.year)
 		return true;

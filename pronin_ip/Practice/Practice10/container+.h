@@ -14,10 +14,10 @@ public:
 	~Container();
 	bool IsFull() const;
 	bool IsEmpty() const;
-	int Find(T*) const;
-	void Add(T*);
+	int Find(const T*) const;
+	void Add(const T*);
 	void Deletebyidx(int);
-	void Delete(T*);
+	void Delete(const T*);
 	void AddSize(int);
 	T& operator[](int);
 	const T& operator[](int) const;
@@ -73,7 +73,7 @@ bool Container <T*, maxsize>::IsEmpty() const
 	return (count == 0);
 }
 template <typename T, int maxsize>
-int Container <T*, maxsize>::Find(T* a) const
+int Container <T*, maxsize>::Find(const T* a) const
 {
 	int flag = -1;
 	for (int i = 0; i < count; i++)
@@ -82,7 +82,7 @@ int Container <T*, maxsize>::Find(T* a) const
 	return flag;
 }
 template <typename T, int maxsize>
-void Container <T*, maxsize>::Add(T* a)
+void Container <T*, maxsize>::Add(const T* a)
 {
 	if (Find(a) == -1)
 	{
@@ -113,7 +113,7 @@ void Container <T*, maxsize>::Deletebyidx(int idx)
 	}
 }
 template <typename T, int maxsize>
-void Container <T*, maxsize>::Delete(T* a)
+void Container <T*, maxsize>::Delete(const T* a)
 {
 	if (Find(a) == -1)
 		throw "element is not found";

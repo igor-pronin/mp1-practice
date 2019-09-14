@@ -12,7 +12,7 @@ public:
 	Date(int, int, int);
 	Date(const Date&);
 	~Date();
-	bool operator==(const Date&);
+	bool operator==(const Date&) const;
 	friend istream& operator>>(istream&, Date&);
 	friend ostream& operator<<(ostream&, const Date&);
 };
