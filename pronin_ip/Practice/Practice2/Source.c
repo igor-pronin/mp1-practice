@@ -9,7 +9,7 @@
 
 void main()
 {
-	int q, a, b, c, cop, d, n, x = 0, y = 9, z = 1, i, j, bull, cow, number;
+	int w = 1, q, a, b, c, cop, d, n, x = 0, y = 9, z = 1, i, j, bull, cow, number;
 	int f[B];
 	int g[B];
 	int l[B];
@@ -63,7 +63,9 @@ void main()
 	{
 		printf("отгадай число");
 		scanf("%d", &number);
-		q = number / pow(10, n - 1);
+		for (i = 0; i < n - 2; i++)
+			w *= 10;
+		q = number / w;
 		if (q == 0 || q > 9)
 		{
 			printf("введеное число не соответствует введеной длине");

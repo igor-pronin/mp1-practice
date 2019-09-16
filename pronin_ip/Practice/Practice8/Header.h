@@ -12,7 +12,7 @@ public:
 	Matrix(const Matrix&);
 	~Matrix();
 	const Matrix& operator=(const Matrix&);
-	bool operator==(const Matrix&);
+	bool operator==(const Matrix&) const;
 	Matrix operator+(double);
 	Matrix operator+(const Matrix&);
 	Matrix operator-(double);
@@ -20,6 +20,6 @@ public:
 	Matrix operator*(double);
 	Matrix operator*(const Matrix&);
 	friend ostream& operator<<(ostream&, const Matrix&);
-	friend istream& operator>>(istream&, const Matrix&);
+	friend istream& operator>>(istream&,  Matrix&);
 	double* operator[](int index);
 };

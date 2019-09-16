@@ -10,7 +10,7 @@
 #define MAX_LEN 4048//макс длина для строк
 #define ROFL 2000
 #define MAX_FILES 1000//предположительное количество файлов
-int kolvo = 0;//количество файлов
+int kolvo = 0;//количество файлов           ///////////////////////////////////////
 #define K 150//для сортировки подсчетом
 
 void Merge(int *a, ULONGLONG *size, int l, int m, int r) //слияние

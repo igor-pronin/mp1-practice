@@ -31,11 +31,18 @@ double Vector::Length(const Vector& a)
 		len += a.elements[i] * a.elements[i];
 	return sqrt(len);
 }
-int Vector::Scayler(const Vector& a, const Vector& b)
+/*int Vector::Scayler(const Vector& a, const Vector& b)
 {
 	int x = 0;
 	for (int i = 0; i < a.n; i++)
 		x += a.elements[i] * b.elements[i];
+	return x;
+}*/
+int Vector::operator*(const Vector& a)
+{
+	int x = 0;
+	for (int i = 0; i < a.n; i++)
+		x += elements[i] * a.elements[i];
 	return x;
 }
 const Vector& Vector::operator=(const Vector& a)
@@ -134,7 +141,7 @@ ostream& operator<< (ostream& o, const Vector& a)
 		o << a.elements[i];
 	return o;
 }
-istream& operator>> (istream& in, const Vector& a)
+istream& operator>> (istream& in, Vector& a)
 {
 	for (int i = 0; i < a.n; i++)
 		in >> a.elements[i];

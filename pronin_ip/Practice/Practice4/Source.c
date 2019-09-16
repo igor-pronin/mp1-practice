@@ -10,7 +10,7 @@ void main()
 	setlocale(LC_ALL, "Russian");
 	srand((unsigned int)time(0));
 	int f = 0, mode, code, i, j, a = 0;
-	char name[N][wordlength] = { "milk" , "bread" , "juice" , "apple" , "butter" , "water" , "salt" , "meet" , "banana" , "chocolate" };
+	char name[N][wordlength] = { "milk" , "bread" , "juice" , "apple" , "butter" , "water" , "salt" , "meet" , "banana" , "chocolate" }; ////////////
 	int cost[N] = { 50, 30, 70, 15, 45, 10, 20, 500, 100, 90 };
 	int discount[N];
 	int kolvo[N] = { 0 };

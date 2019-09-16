@@ -37,7 +37,7 @@ const Matrix& Matrix::operator=(const Matrix& a)
 		m[i] = a.m[i];
 	return *this;
 }
-bool Matrix::operator==(const Matrix& a)
+bool Matrix::operator==(const Matrix& a) const
 {
 	int flag = 0;
 	for (int i = 0; i < rows * cols; i++)
@@ -111,7 +111,7 @@ ostream& operator<<(ostream& o, const Matrix& a)
 	}
 	return o;
 }
-istream& operator>>(istream& in, const Matrix& a)
+istream& operator>>(istream& in, Matrix& a)
 {
 	for (int i = 0; i < a.rows*a.cols; i++)
 		in >> a.m[i];

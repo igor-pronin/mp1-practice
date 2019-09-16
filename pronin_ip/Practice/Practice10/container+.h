@@ -91,7 +91,8 @@ void Container <T*, maxsize>::Add(const T* a)
 			AddSize(0);
 			cout << "maxsize was increased" << endl;
 		}
-		arr[count] = a;
+		T* b = const_cast<T*>(a);
+		arr[count] = b;
 		count++;
 		cout << "element" << " " << a << " " << "was added successfully" << endl;
 	}
