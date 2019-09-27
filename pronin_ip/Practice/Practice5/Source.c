@@ -1,4 +1,5 @@
 ﻿#define _CRT_SECURE_NO_WARNINGS
+#define UNICODE
 #include <windows.h>
 #include <stdio.h>
 #include <string.h>
@@ -10,7 +11,7 @@
 #define MAX_LEN 4048//макс длина для строк
 #define ROFL 2000
 #define MAX_FILES 1000//предположительное количество файлов
-int kolvo = 0;//количество файлов           ///////////////////////////////////////
+int kolvo = 0;//количество файлов
 #define K 150//для сортировки подсчетом
 
 void Merge(int *a, ULONGLONG *size, int l, int m, int r) //слияние
@@ -28,9 +29,7 @@ void Merge(int *a, ULONGLONG *size, int l, int m, int r) //слияние
 			j++;
 		}
 	}
-
 }
-
 void MergeSort(int *a, ULONGLONG *size, int l, int r)//разбиение
 {
 	int m;
@@ -81,142 +80,140 @@ int ListDirectoryContents(const wchar_t *sDir, ULONGLONG*filesize, wchar_t **fil
 	FindClose(hFind);
 	return 0;
 }
-int* quicksort(ULONGLONG* size, int n1, int n2, int n, int* id)//быстрая сортировка
+// Обмен значений целочисленных переменных
+void swap_int(int *var1, int *var2)
 {
-	ULONGLONG tmp;
-	int i = n1, j = n2, p = size[(n1 + n2) / 2], tmp1, k;
-	do {
-		while (size[i] < p) i++;
-		while (size[j] > p) j--;
-		if (i <= j)
+	int tmp = *var1;
+	*var2 = (*var1 = *var2, tmp);
+}
+
+// Обмен значений 64-битных переменных
+void swap_ULL(ULONGLONG *var1, ULONGLONG *var2)
+{
+	ULONGLONG tmp = *var1;
+	*var2 = (*var1 = *var2, tmp);
+}
+int find_by_size(ULONGLONG size, int k, ULONGLONG *sizes, int n)
+{
+	int i = 0, fnd = 0, idx = -1;
+	if (k > n)
+		return -2;
+	while ((i < n) && (fnd < k))
+	{
+		if (sizes[i] == size)
 		{
-			if (size[i] > size[j])
+			idx = i;
+			fnd++;
+		}
+		i++;
+	}
+	if ((i == n) && (idx == -1))
+		return -1;
+	return idx;
+}
+void bubble(ULONGLONG* filesize, int *newindex, int kolvo)//сортировка пузырьком
+{
+	int i, j;
+	for (i = 0; i < kolvo; i++)
+		for (j = 1; j < kolvo - i; j++)
+			if (filesize[newindex[j - 1]] > filesize[newindex[j]])
+				swap_int(newindex + j, newindex + j - 1);
+}
+void insert(ULONGLONG* filesize, int *newindex, int kolvo)//сортировка вставками
+{
+	int i, j;
+	ULONGLONG temp;
+	for (i = 1; i < kolvo; i++)
+	{
+		temp = filesize[newindex[i]];
+		j = i - 1;
+		while ((j >= 0) && (filesize[newindex[j]] > temp))
+		{
+			newindex[j + 1] = newindex[j];
+			newindex[j] = i;
+			j--;
+		}
+	}
+}
+void choose(ULONGLONG* filesize, int kolvo, int* newindex)//сортировка выбором
+{
+	int i, j, minind;
+	ULONGLONG min;
+	for (i = 0; i < kolvo; i++)
+	{
+		min = filesize[newindex[i]];
+		minind = i;
+		for (j = i + 1; j < kolvo; j++)
+			if (filesize[newindex[j]] < min)
 			{
-				tmp = size[i];
-				size[i] = size[j];
-				size[j] = tmp;
-				tmp1 = id[i];
-				id[i] = id[j];
-				id[j] = tmp1;
+				min = filesize[newindex[j]];
+				minind = j;
+			}
+		swap_int(newindex + minind, newindex + i);
+	}
+}
+void podschetom(ULONGLONG*filesize, int n, int*newindex)//сортировка подсчетом
+{
+	ULONGLONG delta = 0, min = filesize[0], max = filesize[0];
+	int *count;
+	int i, j, _i_delta = 0, idx = 0;
+	for (i = 1; i < n; i++)
+	{
+		if (filesize[i] < min)
+			min = filesize[i];
+		if (filesize[i] > max)
+			max = filesize[i];
+	}
+	delta = max - min + 1;
+	if (delta * (ULONGLONG)sizeof(int) > (ULONGLONG)UINT_MAX)
+		return 1;
+	/*    если будет выполнено условие выше, то delta не выйдет за границы    *
+	* диапазона значений int, поэтому потеря данных при приведении исключена */
+	_i_delta = (int)delta;
+	count = (int*)malloc(_i_delta * sizeof(int));
+	for (i = 0; i < _i_delta; i++)
+		count[i] = 0;
+	for (i = 0; i < n; i++)
+		count[filesize[i] - min]++;
+	for (i = 0; i < _i_delta; i++)
+		for (j = 0; j < count[i]; j++, idx++)
+			newindex[idx] = find_by_size(i + min, j + 1, filesize, n);
+	free(count);
+	return 0;
+}
+void quicksort(ULONGLONG *filesize, int *newindex, int n1, int n2)//быстрая сортировка
+{
+	ULONGLONG comp = filesize[(n1 + n2) / 2];
+	int i = n1, j = n2;
+	do {
+		while (filesize[i] < comp)
+			i++;
+		while (filesize[j] > comp)
+			j--;
+		if (i <= j) {
+			if (filesize[i] > filesize[j])
+			{
+				swap_int(newindex + i, newindex + j);
+				swap_ULL(filesize + i, filesize + j);
 			}
 			i++;
 			j--;
 		}
 	} while (i <= j);
 	if (i < n2)
-		id = quicksort(size, i, n2, n, id);
-	if (n1 < j)
-		id = quicksort(size, n1, j, n, id);
-	return id;
+		quicksort(filesize, newindex, i, n2);
+	if (j > n1)
+		quicksort(filesize, newindex, n1, j);
 }
-void podschetom(ULONGLONG*a, int n, int*newindex)//сортировка подсчетом
+void quicksort_start(ULONGLONG *filesize, int n1, int n2, int* newindex)//дополнение к быстрой сортировке
 {
-	int i, j, b = 0;
-	ULONGLONG *count;//массив значений
-	ULONGLONG *dopmass;//доп массив для передачи размеров
-	ULONGLONG min = a[0], max = a[n - 1], k;
-	dopmass = (ULONGLONG*)malloc(n * sizeof(ULONGLONG));
-	for (i = 0; i < n; i++)
-	{
-		dopmass[i] = a[i];
-	}
-	for (i = 0; i < n; i++)
-	{
-		if (a[i] < min)
-			min = a[i];
-	}
-	for (i = 0; i < n; i++)
-	{
-		if (a[i] > max)
-			max = a[i];
-	}
-	k = max + min + 1;
-	count = (ULONGLONG*)malloc(k * sizeof(ULONGLONG));
-	for (i = 0; i < k; i++)
-		count[i] = 0;
-	for (i = 0; i < n; i++)
-	{
-		count[a[i] - min]++;
-	}
-	for (i = 0; i < k; i++)
-	{
-		for (j = 0; j < count[i]; j++)
-			a[b++] = i + min;
-	}
-	for (j = 0; j < n; j++)
-		b = 0;
-	for (i = 0; i < n; i++)
-	{
-		for (j = 0; j < n; j++)
-			if ((a[i] == dopmass[j]))
-			{
-				newindex[b] = j;
-				dopmass[j] = -1;
-				b++;
-				break;
-			}
-	}
-}
-void choose(ULONGLONG* filesize, int kolvo, int*newindex)//сортировка выбором
-{
-	int i, j, minind;
-	ULONGLONG min;
-	for (i = 0; i < kolvo; i++)
-	{
-		min = filesize[i];
-		minind = i;
-
-		for (j = i + 1; j < kolvo; j++)
-		{
-			if (filesize[j] < min)
-			{
-				min = filesize[j];
-				minind = j;
-				newindex[i] = j;
-				filesize[minind] = filesize[i];
-				filesize[i] = min;
-			}
-		}
-	}
-}
-void bubble(ULONGLONG* filesize, int *numer, int kolvo)//сортировка пузырьком
-{
-	int i, j, swap;
-	ULONGLONG tmp;
-	for (i = 0; i < kolvo; i++)
-	{
-		for (j = 1; j < kolvo; j++)
-		{
-			if (filesize[j - 1] > filesize[j])
-			{
-				tmp = filesize[j];
-				filesize[j] = filesize[j - 1];
-				filesize[j - 1] = tmp;
-				swap = numer[j];
-				numer[j] = numer[j - 1];
-				numer[j - 1] = swap;
-			}
-		}
-	}
-}
-void insert(ULONGLONG* filesize, int *numer, int kolvo)//сортировка вставками
-{
-	int i, j, swap;
-	ULONGLONG tmp;
-	for (i = 0; i < kolvo; i++)
-	{
-		j = i - 1;
-		tmp = filesize[i];
-		swap = numer[i];
-		while ((j >= 0) && (filesize[j] > tmp))
-		{
-			filesize[j + 1] = filesize[j];
-			filesize[j] = tmp;
-			numer[j + 1] = numer[j];
-			numer[j] = swap;
-			j--;
-		}
-	}
+	int i, total_length = n2 - n1 + 1;
+	ULONGLONG *newSizes;
+	newSizes = (ULONGLONG*)malloc(total_length * sizeof(ULONGLONG));
+	for (i = 0; i < total_length; i++)
+		newSizes[i] = filesize[i + n1];
+	quicksort(newSizes, newindex, n1, n2);
+	free(newSizes);
 }
 void print(ULONGLONG* filesize, wchar_t **fileNames, int kolvo)//печать
 {
@@ -232,7 +229,7 @@ void menu()//
 	printf("Введите 1 для сортировки пузырьком!\n");
 	printf("Введите 2 для сортировки вставкой!\n");
 	printf("Введите 3 для сортировки выбором!\n");
-	printf("Введите 4 для сортировки подсчетом!\n");
+	printf("Введите 4 для сортировки подсчетом!\n");//+
 	printf("Введите 5 для быстрой сортировки(сортировки Хоара)!\n");
 	printf("Введите 6 для сортировки слиянием!\n");
 	printf("Вы выбрали сортировку номер: ");
@@ -289,7 +286,7 @@ void main()
 				end = clock();
 				for (i = 0; i < kolvo; i++)
 				{
-					wprintf(L"file %s размер %lld \n", fileNames[newindex[i]], filesize[i]);
+					wprintf(L"file %s размер %lld \n", fileNames[newindex[i]], filesize[newindex[i]]);
 				}
 				total_time = (double)(end - start) / CLOCKS_PER_SEC;
 				printf("Время сортировки: %.3lf с\n", total_time);
@@ -303,7 +300,7 @@ void main()
 				end = clock();
 				for (i = 0; i < kolvo; i++)
 				{
-					wprintf(L"file %s размер %lld \n", fileNames[newindex[i]], filesize[i]);
+					wprintf(L"file %s размер %lld \n", fileNames[newindex[i]], filesize[newindex[i]]);
 				}
 				total_time = (double)(end - start) / CLOCKS_PER_SEC;
 				printf("Время сортировки: %.3lf с\n", total_time);
@@ -317,7 +314,7 @@ void main()
 				end = clock();
 				for (i = 0; i < kolvo; i++)
 				{
-					wprintf(L"file %s размер %lld \n", fileNames[newindex[i]], filesize[i]);
+					wprintf(L"file %s размер %lld \n", fileNames[newindex[i]], filesize[newindex[i]]);
 				}
 				total_time = (double)(end - start) / CLOCKS_PER_SEC;
 				printf("Время сортировки: %.3lf с\n", total_time);
@@ -331,7 +328,7 @@ void main()
 				end = clock();
 				for (i = 0; i < kolvo; i++)
 				{
-					wprintf(L"file %s размер %lld \n", fileNames[newindex[i]], filesize[i]);
+					wprintf(L"file %s размер %lld \n", fileNames[newindex[i]], filesize[newindex[i]]);
 				}
 				total_time = (double)(end - start) / CLOCKS_PER_SEC;
 				printf("Время сортировки: %.3lf с\n", total_time);
@@ -339,12 +336,13 @@ void main()
 			case 5:
 				scanf("%c", &e);
 				anihilation(filesizemain, filesize, filesindex, newindex, kolvo);
+				printf("Быстрая сортировка\n");
 				start = clock();
-				newindex = quicksort(filesize, 0, kolvo - 1, kolvo, filesindex);
+				quicksort_start(filesize, 0, kolvo - 1, newindex);
 				end = clock();
 				for (i = 0; i < kolvo; i++)
 				{
-					wprintf(L"file %s размер %lld \n", fileNames[newindex[i]], filesize[i]);
+					wprintf(L"file %s размер %lld \n", fileNames[newindex[i]], filesize[newindex[i]]);
 				}
 				total_time = (double)(end - start) / CLOCKS_PER_SEC;
 				printf("Время сортировки: %.3lf с\n", total_time);
@@ -352,6 +350,7 @@ void main()
 			case 6:
 				scanf("%c", &e);
 				anihilation(filesizemain, filesize, filesindex, newindex, kolvo);
+				printf("Сортировка слиянием\n");
 				start = clock();
 				MergeSort(newindex, filesize, 0, (kolvo - 1));
 				end = clock();
