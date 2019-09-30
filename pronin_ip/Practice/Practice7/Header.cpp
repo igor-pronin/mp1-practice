@@ -24,20 +24,13 @@ Vector::~Vector()
 	n = 0;
 	delete[] elements;
 }
-double Vector::Length(const Vector& a)
+double Vector::Length(const Vector& a) const
 {
 	double len = 0;
 	for (int i = 0; i < n; i++)
 		len += a.elements[i] * a.elements[i];
 	return sqrt(len);
 }
-/*int Vector::Scayler(const Vector& a, const Vector& b)
-{
-	int x = 0;
-	for (int i = 0; i < a.n; i++)
-		x += a.elements[i] * b.elements[i];
-	return x;
-}*/
 int Vector::operator*(const Vector& a)
 {
 	int x = 0;
@@ -94,7 +87,7 @@ Vector Vector::operator-(int a)
 		b.elements[i] = elements[i] - a;
 	return b;
 }
-bool Vector::operator==(const Vector& a)
+bool Vector::operator==(const Vector& a) const
 {
 	for (int i = 0; i < n; i++)
 		if ((elements[i] == a.elements[i]) && (n == a.n))
@@ -102,7 +95,7 @@ bool Vector::operator==(const Vector& a)
 		else
 			return false;
 }
-bool Vector::operator!=(const Vector& a)
+bool Vector::operator!=(const Vector& a) const
 {
 	for (int i = 0; i < n; i++)
 		if ((elements[i] == a.elements[i]) && (n == a.n))
@@ -110,11 +103,11 @@ bool Vector::operator!=(const Vector& a)
 		else
 			return true;
 }
-bool Vector::operator>(const Vector& a)
+bool Vector::operator>(const Vector& a) const
 {
 	return(Length(*this) > Length(a));
 }
-bool Vector::operator<(const Vector& a)
+bool Vector::operator<(const Vector& a) const
 {
 	return(Length(*this) < Length(a));
 }

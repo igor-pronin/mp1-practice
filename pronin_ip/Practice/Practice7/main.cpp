@@ -45,6 +45,6 @@ void main()
 	cout << boolalpha << "V1>V2" << (V1 > V2) << endl;
 	cout << boolalpha << "V1<V2" << (V1 < V2) << endl;
 	cout << "V1 length" << " " << V1.Length(V1) << endl;
-	cout << "V1 V2 scayler" << " " << V1.Scayler(V1, V2) << endl;
+	cout << "V1 V2 scayler" << " " << (V1 * V2) << endl;
 	system("pause");
 }

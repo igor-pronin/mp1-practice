@@ -11,7 +11,7 @@ public:
 	Vector(int, int*);
 	Vector(const Vector &);
 	~Vector();
-	double Length(const Vector&);
+	double Length(const Vector&) const;
 	//int Scayler(const Vector&, const Vector&); ///*/
 	const Vector& operator=(const Vector&);
 	int operator*(const Vector&);
@@ -22,10 +22,10 @@ public:
 	Vector operator-(int);
 	int& operator[](int);
 	const int& operator[](int) const;
-	bool operator==(const Vector&); ////////////const
-	bool operator!=(const Vector&);
-	bool operator>(const Vector&);
-	bool operator<(const Vector&);
+	bool operator==(const Vector&) const;
+	bool operator!=(const Vector&) const;
+	bool operator>(const Vector&) const;
+	bool operator<(const Vector&) const;
 	void* operator new(size_t);
 	void operator delete[](void*);
 	friend ostream& operator<< (ostream&, const Vector&);
