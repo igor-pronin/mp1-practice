@@ -75,7 +75,7 @@ void Todolist::Read(const string namefile)
 	}
 	file.close();
 }
-void Todolist::Print(Date _date)
+void Todolist::Print(Date _date) const
 {
 	bool flag = 0;
 	for (int i = 0; i < count; i++)
