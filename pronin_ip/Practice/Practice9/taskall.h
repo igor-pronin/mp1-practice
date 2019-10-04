@@ -10,5 +10,5 @@ public:
 	Taskall(string, Date);
 	Taskall(const Taskall&);
 	~Taskall();
-	void print();
+	void print() const;
 };

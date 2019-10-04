@@ -27,7 +27,7 @@ Tasktime::~Tasktime()
 	starttime.~Time();
 	finishtime.~Time();
 }
-void Tasktime::print()
+void Tasktime::print() const
 {
 	cout << date << " " << starttime << "-" << finishtime << discription << endl;
 }

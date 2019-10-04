@@ -13,5 +13,5 @@ public:
 	Tasktime(string, Date, Time, Time);
 	Tasktime(const Tasktime&);
 	~Tasktime();
-	void print();
+	void print() const;
 };

@@ -19,7 +19,7 @@ Taskall::~Taskall()
 	discription = "0";
 	date.~Date();
 }
-void Taskall::print()
+void Taskall::print() const
 {
 	cout << date << discription << endl;
 }

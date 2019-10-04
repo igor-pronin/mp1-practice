@@ -14,5 +14,5 @@ public:
 	Todolist(const Todolist&);
 	~Todolist();
 	void Read(const string namefile);
-	void Print(Date);
+	void Print(Date) const;
 };

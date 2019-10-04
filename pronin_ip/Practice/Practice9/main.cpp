@@ -1,5 +1,5 @@
 ﻿#include "todolist.h"
-void main()
+int main()
 {
 	setlocale(LC_ALL, "Russian");
 	Todolist todolist;
